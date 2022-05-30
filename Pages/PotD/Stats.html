@@ -1,0 +1,655 @@
+<html>  
+<title>Palace of the Dead Stats</title>
+
+<body>
+    <script src="https://img.finalfantasyxiv.com/lds/pc/global/js/eorzeadb/loader.js?v2"></script>
+    <p></p>
+    <label for="race">Select Race:</label>
+    <select name="race" id="race">
+        <option selected disabled hidden>--Please choose an option--</option>
+        <option value="Hyur Midlander">Hyur Midlander</option>
+        <option value="Hyur Highlander">Hyur Highlander</option>
+        <option value="Elezen Wildwood">Elezen Wildwood</option>
+        <option value="Elezen Duskwight">Elezen Duskwight</option>
+        <option value="Lalafell Plainsfolk">Lalafell Plainsfolk</option>
+        <option value="Lalafell Dunesfolk">Lalafell Dunesfolk</option>
+        <option value="Miqo'te Seekers of the Sun">Miqo'te Seekers of the Sun</option>
+        <option value="Miqo'te Keepers of the Moon">Miqo'te Keepers of the Moon</option>
+        <option value="Roegadyn Sea Wolves">Roegadyn Sea Wolves</option>
+        <option value="Roegadyn Hellsguard">Roegadyn Hellsguard</option>
+        <option value="Au Ra Raen">Au Ra Raen</option>
+        <option value="Au Ra Xaela">Au Ra Xaela</option>
+        <option value="Hrothgar Helions">Hrothgar Helions</option>
+        <option value="Hrothgar The Lost">Hrothgar The Lost</option>
+        <option value="Viera Rava">Viera Rava</option>
+        <option value="Viera Veena">Viera Veena</option>
+    </select> 
+
+    <p></p>
+
+    <label for="job">Select Job:</label>
+    <select name="job" id="job">
+        <option selected disabled hidden>--Please choose an option--</option>
+        <optgroup label="Tanks">
+            <option value="PLD">Paladin</option>
+            <option value="WAR">Warrior</option>
+            <option value="DRK">Dark Knight</option>
+            <option value="GNB">Gunbreaker</option>
+        </optgroup>
+        <optgroup label="Healer">
+            <option value="WHM">White Mage</option>
+            <option value="SCH">Scholar</option>
+            <option value="AST">Astrologian</option>
+            <option value="SGE">Sage</option>
+        </optgroup>
+        <optgroup label="Melee">
+            <option value="MNK">Monk</option>
+            <option value="DRG">Dragoon</option>
+            <option value="NIN">Ninja</option>
+            <option value="SAM">Samurai</option>
+            <option value="RPR">Reaper</option>
+        </optgroup>
+        <optgroup label="Range">
+            <option value="BRD">Bard</option>
+            <option value="MCH">Machinist</option>
+            <option value="DNC">Dancer</option>
+        </optgroup>
+        <optgroup label="Casters">
+            <option value="BLM">Black Mage</option>
+            <option value="SMN">Summoner</option>
+            <option value="RDM">Red Mage</option>
+        </optgroup>
+    </select> 
+
+    <p></p>
+
+    <label for="food">Select Food:</label>
+    <select name="food" id="food">
+        <option selected disabled hidden>--Please choose an option--</option>
+        <optgroup label="ilvl 580">
+            <option value="Archon Burger">Archon Burger</option>
+            <option value="Beef Stroganoff">Beef Stroganoff</option>
+            <option value="Pumpkin Ratatouille">Pumpkin Ratatouille</option>
+            <option value="Pumpkin Potage">Pumpkin Potage</option>
+            <option value="Peach Juice">Peach Juice</option>
+            <option value="Peach Tart">Peach Tart</option>
+            <option value="Sykon Cookie">Sykon Cookie</option>
+            <option value="Thavnairian Chai">Thavnairian Chai</option>
+            <option value="Scallop Salad">Scallop Salad</option>
+            <option value="Scallop Curry">Scallop Curry</option>
+        </optgroup>
+        <optgroup label="ilvl 560">
+            <option value="Elpis Deipnon">Elpis Deipnon</option>
+            <option value="Baked Alien Soup">Baked Alien Soup</option>
+            <option value="Sykon Salad">Sykon Salad</option>
+            <option value="Sykon Compote">Sykon Compote</option>
+            <option value="Sykon Bavarois">Sykon Bavarois</option>
+        </optgroup>
+        <optgroup label="ilvl545">
+            <option value="Philosopher's Sandwich">Philosopher's Sandwich</option>
+            <option value="Salted Thavnairian Cod">Salted Thavnairian Cod</option>
+            <option value="Coconut Cod Chowder">Coconut Cod Chowder</option>
+            <option value="The Noodles of Elpis">The Noodles of Elpis</option>
+            <option value="Giant Popoto Pancakes">Giant Popoto Pancakes</option>
+        </optgroup>
+    </select>
+
+    <p><span id="test">Test text</span></p>
+
+    <button onclick="myFunction()">Apply</button>
+    <script>
+    function myFunction() {
+    var e = document.getElementById("race");
+    var strRace = e.options[e.selectedIndex].text;
+    span = document.getElementById("test");
+    txt = document.createTextNode(strRace);
+    span.textContent = strRace;
+    e = document.getElementById("job");
+    strRace = e.options[e.selectedIndex].text;
+    span.append(" - " + strRace);
+    }
+    </script>
+
+    <table>
+        <tr>
+            <td>Stats</td>
+            <td>Base Stats</td>
+            <td>Racial Stats</td>
+            <!--Vitality is Stat 2-->
+            <td>Food Bonus</td>
+            <td>Total Stats</td>
+        </tr>
+        <tr>
+            <td>Strength</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Dexterity</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Vitality</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Intelligence</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Mind</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Piety</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Attack Power</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Direct Hit</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Critical Hit</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Attack Magic Potency</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Heal Magic Potency</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Determination</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Skill Speed</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Spell Speed</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>Tenacity</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+        </tr>
+    </table>
+
+    <p></p>
+
+    <table>
+        <tr>
+            <td>Food</td>
+            <td>Stat 1</td>
+            <!--Vitality is Stat 2-->
+            <td>Stat 2</td>
+            <td>Stat 3</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/0638000476e/" class="eorzeadb_link">Archon Burger</a></td>
+            <td>Direct Hit Rate: 90</td>
+            <td>Vitality: 93</td>
+            <td>Determination: 54</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/2936c4b37c0/" class="eorzeadb_link">Beef Stroganoff</a></td>
+            <td>Skill Speed: 90</td>
+            <td>Vitality: 93</td>
+            <td>Direct Hit Rate: 54</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/7538b2794aa/" class="eorzeadb_link">Pumpkin Ratatouille</a></td>
+            <td>Critical Hit: 90</td>
+            <td>Vitality: 93</td>
+            <td>Skill Speed: 54</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/a1bd66cc8e5/" class="eorzeadb_link">Pumpkin Potage</a></td>
+            <td>Determination: 90</td>
+            <td>Vitality: 93</td>
+            <td>Critical Hit: 54</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/789fe90bd5c/" class="eorzeadb_link">Peach Juice</a></td>
+            <td>Piety: 90</td>
+            <td>Vitality: 93</td>
+            <td>Determination: 54</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/8f5aac8a216/" class="eorzeadb_link">Peach Tart</a></td>
+            <td>Spell Speed: 90</td>
+            <td>Vitality: 93</td>
+            <td>Piety: 54</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/4a8d54c2efa/" class="eorzeadb_link">Sykon Cookie</a></td>
+            <td>Spell Speed: 90</td>
+            <td>Vitality: 93</td>
+            <td>Direct Hit Rate: 54</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/e684e99590f/" class="eorzeadb_link">Thavnairian Chai</a></td>
+            <td>Critical Hit: 90</td>
+            <td>Vitality: 93</td>
+            <td>Spell Speed: 54</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/6d14c65dd8a/" class="eorzeadb_link">Scallop Salad</a></td>
+            <td>Tenacity: 90</td>
+            <td>Vitality: 93</td>
+            <td>Determination: 54</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/ada67e857f3/" class="eorzeadb_link">Scallop Curry</a></td>
+            <td>Determination: 90</td>
+            <td>Vitality: 93</td>
+            <td>Tenacity: 54</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/3bfe7fa5d4e/" class="eorzeadb_link">Elpis Deipnon</a></td>
+            <td>Tenacity: 82</td>
+            <td>Vitality: 85</td>
+            <td>Determination: 50</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/37fac9af789/" class="eorzeadb_link">Baked Alien Soup</a></td>
+            <td>Skill Speed: 82</td>
+            <td>Vitality: 85</td>
+            <td>Direct Hit Rate: 50</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/941e8588331/" class="eorzeadb_link">Sykon Salad</a></td>
+            <td>Spell Speed: 82</td>
+            <td>Vitality: 85</td>
+            <td>Direct Hit Rate: 50</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/1adacdf79f9/" class="eorzeadb_link">Sykon Compote</a></td>
+            <td>Piety: 82</td>
+            <td>Vitality: 85</td>
+            <td>Determination: 50</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/997edd435a2/" class="eorzeadb_link">Sykon Bavarois</a></td>
+            <td>Direct Hit Rate: 82</td>
+            <td>Vitality: 85</td>
+            <td>Determination: 50</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/69e470db469/" class="eorzeadb_link">Philosopher's Sandwich</a></td>
+            <td>Spell Speed: 76</td>
+            <td>Vitality: 82</td>
+            <td>Direct Hit Rate: 46</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/2bbdf83e22f/" class="eorzeadb_link">Salted Thavnairian Cod</a></td>
+            <td>Piety: 76</td>
+            <td>Vitality: 82</td>
+            <td>Determination: 46</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/ac97918bbd7/" class="eorzeadb_link">Coconut Cod Chowder</a></td>
+            <td>Determination: 76</td>
+            <td>Vitality: 82</td>
+            <td>Critical Hit: 46</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/91505562cc2/" class="eorzeadb_link">The Noodles of Elpis</a></td>
+            <td>Direct Hit Rate: 76</td>
+            <td>Vitality: 82</td>
+            <td>Determination: 46</td>
+        </tr>
+        <tr>
+            <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/2f126461b65/" class="eorzeadb_link">Giant Popoto Pancakes</a></td>
+            <td>Tenacity: 76</td>
+            <td>Vitality: 82</td>
+            <td>Determination: 46</td>
+        </tr>
+    </table>
+
+    <p></p>
+
+    <table>
+        <tr>
+            <td>Tincture</td>
+            <!--30s-->
+            <td>Grade 1</td>
+            <td>Grade 2</td>
+            <td>Grade 3</td>
+            <td>Grade 4</td>
+            <td>Grade 5</td>
+            <td>Grade 6</td>
+        </tr>
+        <tr>
+            <td>NQ Strength</td>
+            <td>94</td>
+            <td>99</td>
+            <td>106</td>
+            <td>115</td>
+            <td>136</td>
+            <td>155</td>
+        </tr>
+        <tr>
+            <td>HQ Strength</td>
+            <td>117</td>
+            <td>124</td>
+            <td>133</td>
+            <td>144</td>
+            <td>171</td>
+            <td>194</td>
+        </tr>
+        <tr>
+            <td>NQ Dexterity</td>
+            <td>94</td>
+            <td>99</td>
+            <td>106</td>
+            <td>115</td>
+            <td>136</td>
+            <td>155</td>
+        </tr>
+        <tr>
+            <td>HQ Dexterity</td>
+            <td>117</td>
+            <td>124</td>
+            <td>133</td>
+            <td>144</td>
+            <td>171</td>
+            <td>194</td>
+        </tr>
+        <tr>
+            <td>NQ Vitality</td>
+            <td>94</td>
+            <td>99</td>
+            <td>106</td>
+            <td>115</td>
+            <td>136</td>
+            <td>155</td>
+        </tr>
+        <tr>
+            <td>HQ Vitality</td>
+            <td>117</td>
+            <td>124</td>
+            <td>133</td>
+            <td>144</td>
+            <td>171</td>
+            <td>194</td>
+        </tr>
+        <tr>
+            <td>NQ Intelligence</td>
+            <td>94</td>
+            <td>99</td>
+            <td>106</td>
+            <td>115</td>
+            <td>136</td>
+            <td>155</td>
+        </tr>
+        <tr>
+            <td>HQ Intelligence</td>
+            <td>117</td>
+            <td>124</td>
+            <td>133</td>
+            <td>144</td>
+            <td>171</td>
+            <td>194</td>
+        </tr>
+        <tr>
+            <td>NQ Mind</td>
+            <td>94</td>
+            <td>99</td>
+            <td>106</td>
+            <td>115</td>
+            <td>136</td>
+            <td>155</td>
+        </tr>
+        <tr>
+            <td>HQ Mind</td>
+            <td>117</td>
+            <td>124</td>
+            <td>133</td>
+            <td>144</td>
+            <td>171</td>
+            <td>194</td>
+        </tr>
+    </table>
+
+    <p></p>
+
+    <table>
+        <tr>
+            <td>Infusion</td>
+            <!--30s-->
+            <td>Grade 1</td>
+            <td>Grade 2</td>
+            <td>Grade 3</td>
+        </tr>
+        <tr>
+            <td>NQ Strength</td>
+            <td>78</td>
+            <td>82</td>
+            <td>89</td>
+        </tr>
+        <tr>
+            <td>HQ Strength</td>
+            <td>98</td>
+            <td>103</td>
+            <td>113</td>
+        </tr>
+        <tr>
+            <td>NQ Dexterity</td>
+            <td>78</td>
+            <td>82</td>
+            <td>89</td>
+        </tr>
+        <tr>
+            <td>HQ Dexterity</td>
+            <td>98</td>
+            <td>103</td>
+            <td>113</td>
+        </tr>
+        <tr>
+            <td>NQ Vitality</td>
+            <td>78</td>
+            <td>82</td>
+            <td>89</td>
+        </tr>
+        <tr>
+            <td>HQ Vitality</td>
+            <td>98</td>
+            <td>103</td>
+            <td>113</td>
+        </tr>
+        <tr>
+            <td>NQ Intelligence</td>
+            <td>78</td>
+            <td>82</td>
+            <td>89</td>
+        </tr>
+        <tr>
+            <td>HQ Intelligence</td>
+            <td>98</td>
+            <td>103</td>
+            <td>113</td>
+        </tr>
+        <tr>
+            <td>NQ Mind</td>
+            <td>78</td>
+            <td>82</td>
+            <td>89</td>
+        </tr>
+        <tr>
+            <td>HQ Mind</td>
+            <td>98</td>
+            <td>103</td>
+            <td>113</td>
+        </tr>
+    </table>
+
+    <p></p>
+
+    <table>
+        <tr>
+            <td>Potion</td>
+            <!--15s-->
+            <td>Potion</td>
+            <td>Hi-Potion</td>
+            <td>Mega-Potion</td>
+            <td>X-Potion</td>
+            <td>Draconian Potion</td>
+            <td>Max-Potion</td>
+            <td>Supermax-Potion</td>
+        </tr>
+        <tr>
+            <td>NQ Strength</td>
+            <td>12</td>
+            <td>27</td>
+            <td>49</td>
+            <td>67</td>
+            <td>70</td>
+            <td>76</td>
+            <td>81</td>
+        </tr>
+        <tr>
+            <td>HQ Strength</td>
+            <td>15</td>
+            <td>34</td>
+            <td>61</td>
+            <td>84</td>
+            <td>87</td>
+            <td>95</td>
+            <td>101</td>
+        </tr>
+        <tr>
+            <td>NQ Dexterity</td>
+            <td>12</td>
+            <td>27</td>
+            <td>49</td>
+            <td>67</td>
+            <td>70</td>
+            <td>76</td>
+            <td>81</td>
+        </tr>
+        <tr>
+            <td>HQ Dexterity</td>
+            <td>15</td>
+            <td>34</td>
+            <td>61</td>
+            <td>84</td>
+            <td>87</td>
+            <td>95</td>
+            <td>101</td>
+        </tr>
+        <tr>
+            <td>NQ Vitality</td>
+            <td>12</td>
+            <td>27</td>
+            <td>49</td>
+            <td>67</td>
+            <td>70</td>
+            <td>76</td>
+            <td>81</td>
+        </tr>
+        <tr>
+            <td>HQ Vitality</td>
+            <td>15</td>
+            <td>34</td>
+            <td>61</td>
+            <td>84</td>
+            <td>87</td>
+            <td>95</td>
+            <td>101</td>
+        </tr>
+        <tr>
+            <td>NQ Intelligence</td>
+            <td>12</td>
+            <td>27</td>
+            <td>49</td>
+            <td>67</td>
+            <td>70</td>
+            <td>76</td>
+            <td>81</td>
+        </tr>
+        <tr>
+            <td>HQ Intelligence</td>
+            <td>15</td>
+            <td>34</td>
+            <td>61</td>
+            <td>84</td>
+            <td>87</td>
+            <td>95</td>
+            <td>101</td>
+        </tr>
+        <tr>
+            <td>NQ Mind</td>
+            <td>12</td>
+            <td>27</td>
+            <td>49</td>
+            <td>67</td>
+            <td>70</td>
+            <td>76</td>
+            <td>81</td>
+        </tr>
+        <tr>
+            <td>HQ Mind</td>
+            <td>15</td>
+            <td>34</td>
+            <td>61</td>
+            <td>84</td>
+            <td>87</td>
+            <td>95</td>
+            <td>101</td>
+        </tr>
+    </table>
+</body>
+
+</html>
