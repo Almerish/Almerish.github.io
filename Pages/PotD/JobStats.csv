@@ -1,4 +1,4 @@
-Stat,Strength,Dexterity,Vitality,Intelligence,Mind,Piety,Attack Power,Direct Hit,Critical Hit,Attack Magic Potency,Heal Magic Potency,Determination,Skill Speed,Spell Speed,Tenacity
+Class,Strength,Dexterity,Vitality,Intelligence,Mind,Piety,Attack Power,Direct Hit,Critical Hit,Attack Magic Potency,Heal Magic Potency,Determination,Skill Speed,Spell Speed,Tenacity
 BLM,78,198,756,840,143,218,78,354,354,840,143,218,539,539,354
 SMN,176,198,756,840,154,218,176,354,354,840,154,218,539,539,354
 RDM,99,208,756,840,219,218,99,354,354,840,219,218,539,539,354

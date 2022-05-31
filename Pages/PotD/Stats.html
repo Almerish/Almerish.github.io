@@ -3,6 +3,8 @@
 
 <body>
     <script src="https://img.finalfantasyxiv.com/lds/pc/global/js/eorzeadb/loader.js?v2"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="jquery-csv.js"></script>
     <p></p>
     <label for="race">Select Race:</label>
     <select name="race" id="race">
@@ -99,14 +101,19 @@
     <button onclick="myFunction()">Apply</button>
     <script>
     function myFunction() {
-    var e = document.getElementById("race");
-    var strRace = e.options[e.selectedIndex].text;
-    span = document.getElementById("test");
-    txt = document.createTextNode(strRace);
-    span.textContent = strRace;
-    e = document.getElementById("job");
-    strRace = e.options[e.selectedIndex].text;
-    span.append(" - " + strRace);
+        var e = document.getElementById("race");
+        var strRace = e.options[e.selectedIndex].text;
+        span = document.getElementById("test");
+        txt = document.createTextNode(strRace);
+        span.textContent = strRace;
+        e = document.getElementById("job");
+        strRace = e.options[e.selectedIndex].text;
+        span.append(" - " + strRace);
+        var result = $.csv.toObjects("JobStats.csv");
+        table = document.getElementById("STR1");
+        console.log(table);
+        let find = result.find(result => result.class === strRace);
+        table.append = strRace;
     }
     </script>
 
@@ -124,7 +131,7 @@
         </tr>
         <tr>
             <td>Strength</td>
-            <td>0</td>
+            <td id="STR1">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
