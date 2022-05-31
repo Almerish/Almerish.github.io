@@ -3,8 +3,6 @@
 
 <body>
     <script src="https://img.finalfantasyxiv.com/lds/pc/global/js/eorzeadb/loader.js?v2"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="jquery-csv.js"></script>
     <p></p>
     <label for="race">Select Race:</label>
     <select name="race" id="race">
@@ -99,6 +97,8 @@
     <p><span id="test">Test text</span></p>
 
     <button onclick="myFunction()">Apply</button>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="jquery.csv.js"></script>
     <script>
     function myFunction() {
         var e = document.getElementById("race");
@@ -108,12 +108,23 @@
         span.textContent = strRace;
         e = document.getElementById("job");
         strRace = e.options[e.selectedIndex].text;
+        strJob = e.options[e.selectedIndex].value;
         span.append(" - " + strRace);
-        var result = $.csv.toObjects("JobStats.csv");
-        table = document.getElementById("STR1");
-        console.log(table);
-        let find = result.find(result => result.class === strRace);
-        table.append = strRace;
+
+        $.get("JobStats.csv", function(data){
+            var csvResults = $.csv.toObjects(data);
+            let result = csvResults.find(result => result.Class === strJob);
+            let i = 0;
+            for (const property in result) {
+                if (i > 0){
+                    table = document.getElementById("JOB"+i);
+                    table.textContent = result[property];
+                }
+                i++;
+            }
+            alert(csvResults + "\n" + result.Strength + "\n" + data);
+        });
+        
     }
     </script>
 
@@ -131,42 +142,42 @@
         </tr>
         <tr>
             <td>Strength</td>
-            <td id="STR1">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="JOB1">0</td>
+            <td id="STR2">0</td>
+            <td id="STR3">0</td>
+            <td id="STR4">0</td>
         </tr>
         <tr>
             <td>Dexterity</td>
-            <td>0</td>
+            <td id="JOB2">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
         </tr>
         <tr>
             <td>Vitality</td>
-            <td>0</td>
+            <td id="JOB3">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
         </tr>
         <tr>
             <td>Intelligence</td>
-            <td>0</td>
+            <td id="JOB4">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
         </tr>
         <tr>
             <td>Mind</td>
-            <td>0</td>
+            <td id="JOB5">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
         </tr>
         <tr>
             <td>Piety</td>
-            <td>0</td>
+            <td id="JOB6">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -175,7 +186,7 @@
         </tr>
         <tr>
             <td>Attack Power</td>
-            <td>0</td>
+            <td id="JOB7">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -184,7 +195,7 @@
         </tr>
         <tr>
             <td>Direct Hit</td>
-            <td>0</td>
+            <td id="JOB8">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -193,7 +204,7 @@
         </tr>
         <tr>
             <td>Critical Hit</td>
-            <td>0</td>
+            <td id="JOB9">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -204,7 +215,7 @@
         </tr>
         <tr>
             <td>Attack Magic Potency</td>
-            <td>0</td>
+            <td id="JOB10">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -213,7 +224,7 @@
         </tr>
         <tr>
             <td>Heal Magic Potency</td>
-            <td>0</td>
+            <td id="JOB11">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -222,7 +233,7 @@
         </tr>
         <tr>
             <td>Determination</td>
-            <td>0</td>
+            <td id="JOB12">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -231,7 +242,7 @@
         </tr>
         <tr>
             <td>Skill Speed</td>
-            <td>0</td>
+            <td id="JOB13">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -240,7 +251,7 @@
         </tr>
         <tr>
             <td>Spell Speed</td>
-            <td>0</td>
+            <td id="JOB14">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
@@ -249,7 +260,7 @@
         </tr>
         <tr>
             <td>Tenacity</td>
-            <td>0</td>
+            <td id="JOB15">0</td>
             <td>0</td>
             <td>0</td>
             <td>0</td>
