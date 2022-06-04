@@ -94,23 +94,38 @@
         </optgroup>
     </select>
 
-    <p><span id="test">Test text</span></p>
+    <p><span id="test">Selection</span></p>
 
     <button onclick="myFunction()">Apply</button>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="jquery.csv.js"></script>
     <script>
     function myFunction() {
+        //get selected race
         var e = document.getElementById("race");
         var strRace = e.options[e.selectedIndex].text;
         span = document.getElementById("test");
-        txt = document.createTextNode(strRace);
         span.textContent = strRace;
+        strRace = e.options[e.selectedIndex].value;
+        //get selected job
         e = document.getElementById("job");
-        strRace = e.options[e.selectedIndex].text;
+        var strJob = e.options[e.selectedIndex].text;
+        span.append(" - " + strJob);
         strJob = e.options[e.selectedIndex].value;
-        span.append(" - " + strRace);
+        //get selected food
+        e = document.getElementById("food");
+        var strFood = e.options[e.selectedIndex].text;
+        span.append(" - " + strFood);
+        strFood = e.options[e.selectedIndex].value;
 
+        updateJobTable(strJob, strRace, strFood);
+        //.then(updateTotalTable());
+        //updateRaceTable(strRace, strJob);
+        //updateTotalTable();
+    }
+
+    function updateJobTable(strJob, strRace, strFood){
+        
         $.get("JobStats.csv", function(data){
             var csvResults = $.csv.toObjects(data);
             let result = csvResults.find(result => result.Class === strJob);
@@ -122,16 +137,230 @@
                 }
                 i++;
             }
-            alert(csvResults + "\n" + result.Strength + "\n" + data);
+            //alert(csvResults + "\n" + result.Strength + "\n" + data);
+            updateRaceTable(strRace, strJob, strFood);
+        })
+    }
+
+    function updateRaceTable(strRace, strJob, strFood){
+        $.get("RacialStats.csv", function(data){
+            var csvResults = $.csv.toObjects(data);
+            let result = csvResults.find(result => result.Race === strRace);
+            let i = 0;
+            for (const property in result) {
+                if (i > 0){
+                    table = document.getElementById("RACE"+i);
+                    table.textContent = result[property];
+                }
+                if (i==1){
+                    table = document.getElementById("RACE7");
+                    table.textContent = result[property];
+                }
+                if (i==4 && strJob!="WHM" && strJob!="SCH" && strJob!="AST" && strJob!="SGE"){
+                    table = document.getElementById("RACE10");
+                    table.textContent = result[property];
+                }
+                if (i==5){
+                    if (strJob=="WHM" || strJob=="SCH" || strJob=="AST" || strJob=="SGE"){
+                        table = document.getElementById("RACE10");
+                        table.textContent = result[property];
+                    }
+                    table = document.getElementById("RACE11");
+                    table.textContent = result[property];
+                }
+                i++;
+            }
+            updateFoodTable(strFood, strJob);
         });
-        
+    }
+
+    function updateFoodTable(strFood, strJob){
+        var foodStatsDict = {
+            "Vitality": 3,
+            "Piety": 6,
+            "Direct Hit": 8,
+            "Critical Hit": 9,
+            "Determination": 12,
+            "Skill Speed": 13,
+            "Spell Speed": 14,
+            "Tenacity": 15
+        };
+        var table = document.getElementById("statsTable");
+        for(let i = 1; i<table.rows.length; i++){
+            table.rows[i].cells[3].textContent = 0;
+        }
+        //update stat table
+        for(let i = 1; i<4; i++){
+            let stat = document.getElementById(strFood+i);
+            let parsedStat = stat.textContent.split(": ");
+            let job = "JOB" + foodStatsDict[parsedStat[0]];
+            let race = "RACE" + foodStatsDict[parsedStat[0]];
+            let food = "FOOD" + foodStatsDict[parsedStat[0]];
+            job = document.getElementById(job);
+            race = document.getElementById(race);
+            food = document.getElementById(food);
+            let foodBonus = Math.floor((parseInt(job.textContent) + parseInt(race.textContent)) * 0.10);
+            if (foodBonus<=parseInt(parsedStat[1])){
+                food.textContent = foodBonus;
+            } else {
+                food.textContent = parsedStat[1];
+            }
+        }
+        table = document.getElementById("foodTable");
+        //update food table
+        for(let i = 1; i<table.rows.length; i++){
+            for(let x = 1; x<4; x++){
+                let stat = table.rows[i].cells[x].textContent;
+                let parsedStat = stat.split(": ");
+                let job = "JOB" + foodStatsDict[parsedStat[0]];
+                let race = "RACE" + foodStatsDict[parsedStat[0]];
+                job = document.getElementById(job);
+                race = document.getElementById(race);
+                let foodBonus = Math.floor((parseInt(job.textContent) + parseInt(race.textContent)) * 0.10);
+                if (foodBonus<=parseInt(parsedStat[1])){
+                    table.rows[i].cells[x].textContent = parsedStat[0] + ": " + foodBonus;
+                } else {
+                    table.rows[i].cells[x].textContent = parsedStat[0] + ": " + parsedStat[1];
+                }
+            }
+        }
+        updateTotalTable(strJob);
+    }
+
+    function updateTotalTable(strJob){
+        var table = document.getElementById("statsTable");
+        for(let i = 1; i<table.rows.length; i++){
+            let total = 0
+            for(let x = 1; x<4; x++){
+                total+=Number(table.rows[i].cells[x].innerText);
+            }
+            table.rows[i].cells[4].innerText = total;
+            if (i==6){
+                table.rows[i].cells[5].innerText = (Math.floor((150*(total-218))/600)).toFixed(2);
+            } else if (i==8){
+                table.rows[i].cells[5].innerText = (Math.floor((550*(total-354))/600)/10).toFixed(2) + "%";
+            } else if (i==9){
+                table.rows[i].cells[5].innerText = (Math.floor((200*(total-354))/600+50)/10).toFixed(2) + "%";
+                table.rows[i].cells[7].innerText = ((400+Math.floor((200*(total-354))/600))/10).toFixed(2) + "%";
+            } else if (i==12){
+                table.rows[i].cells[5].innerText = (Math.floor((140*(total-218))/600+1000)/1000).toFixed(3);
+            } else if (i==13){
+                table.rows[i].cells[5].innerText = ((1000+Math.floor((130*(total-354))/600))/1000).toFixed(3);
+                updateSkillSpeed(total);
+            } else if (i==14){
+                table.rows[i].cells[5].innerText = ((1000+Math.floor((130*(total-354))/600))/1000).toFixed(3);
+                updateSpellSpeed(total);
+            } else if (i==15){
+                table.rows[i].cells[5].innerText = ((1000+Math.floor((100*(total-354))/600))/1000).toFixed(3);
+                table.rows[i].cells[7].innerText = ((1000-Math.floor((100*(total-354))/600))/1000).toFixed(3);
+            }
+        }
+        updatePotions();
+    }
+
+    function updateSkillSpeed(total){
+        table = document.getElementById("skillSpeedTable");
+        table.rows[1].cells[1].innerText = Math.floor(1500*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[2].innerText = Math.floor(2000*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[3].innerText = Math.floor(2500*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[4].innerText = Math.floor(2800*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[5].innerText = Math.floor(3000*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[6].innerText = Math.floor(3500*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[7].innerText = Math.floor(4000*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+    }
+
+    function updateSpellSpeed(total){
+        table = document.getElementById("spellSpeedTable");
+        table.rows[1].cells[1].innerText = Math.floor(1500*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[2].innerText = Math.floor(2000*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[3].innerText = Math.floor(2500*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[4].innerText = Math.floor(2800*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[5].innerText = Math.floor(3000*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[6].innerText = Math.floor(3500*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+        table.rows[1].cells[7].innerText = Math.floor(4000*(1000+Math.ceil(130*(354-total)/600))/10000)/100;
+    }
+
+    function updatePotions(){
+        var statsDict = {
+            "Strength": 1,
+            "Dexterity": 2,
+            "Vitality": 3,
+            "Intelligence": 4,
+            "Mind": 5
+        }
+        //potion 20% HQ, 16% NQ
+        //infusion 10% HQ, 8% NQ
+        //tincture 10% HQ, 8% NQ
+        var table = document.getElementById("tinctureTable");
+        for(let i = 1; i<table.rows.length; i++){
+            let stat = table.rows[i].cells[0].textContent;
+            let parsedStat = stat.split(" ");
+            for(let x = 1; x<7; x++){
+                let total = "TOTAL"+statsDict[parsedStat[1]];
+                total = document.getElementById(total);
+                if (i%2==1){
+                    total = parseInt(total.textContent)*0.08;
+                    if (total<=parseInt(table.rows[i].cells[x].textContent)){
+                        table.rows[i].cells[x].textContent = Math.floor(total);
+                    } 
+                } else {
+                    total = parseInt(total.textContent)*0.10;
+                    if (total<=parseInt(table.rows[i].cells[x].textContent)){
+                        table.rows[i].cells[x].textContent = Math.floor(total);
+                    } 
+                }
+                
+            }
+        }
+        table = document.getElementById("infusionTable");
+        for(let i = 1; i<table.rows.length; i++){
+            let stat = table.rows[i].cells[0].textContent;
+            let parsedStat = stat.split(" ");
+            for(let x = 1; x<4; x++){
+                let total = "TOTAL"+statsDict[parsedStat[1]];
+                total = document.getElementById(total);
+                if (i%2==1){
+                    total = parseInt(total.textContent)*0.08;
+                    if (total<=parseInt(table.rows[i].cells[x].textContent)){
+                        table.rows[i].cells[x].textContent = Math.floor(total);
+                    } 
+                } else {
+                    total = parseInt(total.textContent)*0.10;
+                    if (total<=parseInt(table.rows[i].cells[x].textContent)){
+                        table.rows[i].cells[x].textContent = Math.floor(total);
+                    } 
+                }
+                
+            }
+        }
+        table = document.getElementById("potionTable");
+        for(let i = 1; i<table.rows.length; i++){
+            let stat = table.rows[i].cells[0].textContent;
+            let parsedStat = stat.split(" ");
+            for(let x = 1; x<8; x++){
+                let total = "TOTAL"+statsDict[parsedStat[1]];
+                total = document.getElementById(total);
+                if (i%2==1){
+                    total = parseInt(total.textContent)*0.08;
+                    if (total<=parseInt(table.rows[i].cells[x].textContent)){
+                        table.rows[i].cells[x].textContent = Math.floor(total);
+                    } 
+                } else {
+                    total = parseInt(total.textContent)*0.10;
+                    if (total<=parseInt(table.rows[i].cells[x].textContent)){
+                        table.rows[i].cells[x].textContent = Math.floor(total);
+                    } 
+                }
+                
+            }
+        }
     }
     </script>
 
     <p>All formulas were taken from the <a href="https://www.akhmorning.com/allagan-studies/stats/#player-stats-overview">Ahk Morning</a> theory crafters and its their credit.</p>
 
     <!--Stats Calculator Table-->
-    <table>
+    <table id="statsTable">
         <tr>
             <td>Stats</td>
             <td>Base Stats</td>
@@ -143,71 +372,71 @@
         <tr>
             <td>Strength</td>
             <td id="JOB1">0</td>
-            <td id="STR2">0</td>
-            <td id="STR3">0</td>
-            <td id="STR4">0</td>
+            <td id="RACE1">0</td>
+            <td id="FOOD1">0</td>
+            <td id="TOTAL1">0</td>
         </tr>
         <tr>
             <td>Dexterity</td>
             <td id="JOB2">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE2">0</td>
+            <td id="FOOD2">0</td>
+            <td id="TOTAL2">0</td>
         </tr>
         <tr>
             <td>Vitality</td>
             <td id="JOB3">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE3">0</td>
+            <td id="FOOD3">0</td>
+            <td id="TOTAL3">0</td>
         </tr>
         <tr>
             <td>Intelligence</td>
             <td id="JOB4">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE4">0</td>
+            <td id="FOOD4">0</td>
+            <td id="TOTAL4">0</td>
         </tr>
         <tr>
             <td>Mind</td>
             <td id="JOB5">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE5">0</td>
+            <td id="FOOD5">0</td>
+            <td id="TOTAL5">0</td>
         </tr>
         <tr>
             <td>Piety</td>
             <td id="JOB6">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE6">0</td>
+            <td id="FOOD6">0</td>
+            <td id="TOTAL6">0</td>
             <td>0</td>
             <td>Additional MP per Tick (Healer Only)</td>
         </tr>
         <tr>
             <td>Attack Power</td>
             <td id="JOB7">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE7">0</td>
+            <td id="FOOD7">0</td>
+            <td id="TOTAL7">0</td>
             <td></td>
             <td>Attack Power = Strength</td>
         </tr>
         <tr>
             <td>Direct Hit</td>
             <td id="JOB8">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE8">0</td>
+            <td id="FOOD8">0</td>
+            <td id="TOTAL8">0</td>
             <td>0.00%</td>
             <td>Direct Hit Chance (Flat 25% increased damage on Direct Hit)</td>
         </tr>
         <tr>
             <td>Critical Hit</td>
             <td id="JOB9">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE9">0</td>
+            <td id="FOOD9">0</td>
+            <td id="TOTAL9">0</td>
             <td>5.00%</td>
             <td>Critical Hit Rate</td>
             <td>40.00%</td>
@@ -216,54 +445,54 @@
         <tr>
             <td>Attack Magic Potency</td>
             <td id="JOB10">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE10">0</td>
+            <td id="FOOD10">0</td>
+            <td id="TOTAL10">0</td>
             <td></td>
             <td>Attack Magic Potency = Intelligence (Mind for Healers)</td>
         </tr>
         <tr>
             <td>Heal Magic Potency</td>
             <td id="JOB11">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE11">0</td>
+            <td id="FOOD11">0</td>
+            <t id="TOTAL11"d>0</td>
             <td></td>
             <td>Heal Magic Potency = Mind</td>
         </tr>
         <tr>
             <td>Determination</td>
             <td id="JOB12">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE12">0</td>
+            <td id="FOOD12">0</td>
+            <td id="TOTAL12">0</td>
             <td>1.00</td>
             <td>Damage and Healing Multiplier</td>
         </tr>
         <tr>
             <td>Skill Speed</td>
             <td id="JOB13">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE13">0</td>
+            <td id="FOOD13">0</td>
+            <td id="TOTAL13">0</td>
             <td>1.00</td>
             <td>Auto Attack, DoT, and HoT Damage Multiplier (Speed Tables Below)</td>
         </tr>
         <tr>
             <td>Spell Speed</td>
             <td id="JOB14">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE14">0</td>
+            <td id="FOOD14">0</td>
+            <td id="TOTAL14">0</td>
             <td>1.00</td>
             <td>Auto Attack, DoT, and HoT Damage Multiplier (Speed Tables Below)</td>
         </tr>
         <tr>
             <td>Tenacity</td>
             <td id="JOB15">0</td>
-            <td>0</td>
-            <td>0</td>
-            <td>0</td>
+            <td id="RACE15">0</td>
+            <td id="FOOD15">0</td>
+            <td id="TOTAL15">0</td>
             <td>1.00</td>
             <td>Outgoing Damage and Healing Multiplier (Tank Only)</td>
             <td>1.00</td>
@@ -274,125 +503,61 @@
     <p></p>
 
     <!--Skill Speed Calculator Table-->
-    <table>
+    <table id= "skillSpeedTable">
         <caption>Skill Speed</caption>
         <tr>
-            <td>
-                Base Cast Times
-            </td>
-            <td>
-                1.5
-            </td>
-            <td>
-                2
-            </td>
-            <td>
-                2.5
-            </td>
-            <td>
-                2.8
-            </td>
-            <td>
-                3
-            </td>
-            <td>
-                3.5
-            </td>
-            <td>
-                4
-            </td>
+            <td>Base Cast Times</td>
+            <td>1.5</td>
+            <td>2</td>
+            <td>2.5</td>
+            <td>2.8</td>
+            <td>3</td>
+            <td>3.5</td>
+            <td>4</td>
         </tr>
         <tr>
-            <td>
-                New Cast Times
-            </td>
-            <td>
-                1.44
-            </td>
-            <td>
-                1.92
-            </td>
-            <td>
-                2.4
-            </td>
-            <td>
-                2.68
-            </td>
-            <td>
-                2.88
-            </td>
-            <td>
-                3.36
-            </td>
-            <td>
-                3.84
-            </td>
+            <td>New Cast Times</td>
+            <td id="SKS1">1.44</td>
+            <td id="SKS2">1.92</td>
+            <td id="SKS3">2.4</td>
+            <td id="SKS4">2.68</td>
+            <td id="SKS5">2.88</td>
+            <td id="SKS6">3.36</td>
+            <td id="SKS7">3.84</td>
         </tr>
     </table>
 
     <p></p>
 
     <!--Spell Speed Calculator Table-->
-    <table>
+    <table id= "spellSpeedTable">
         <caption>Spell Speed</caption>
         <tr>
-            <td>
-                Base Cast Times
-            </td>
-            <td>
-                1.5
-            </td>
-            <td>
-                2
-            </td>
-            <td>
-                2.5
-            </td>
-            <td>
-                2.8
-            </td>
-            <td>
-                3
-            </td>
-            <td>
-                3.5
-            </td>
-            <td>
-                4
-            </td>
+            <td>Base Cast Times</td>
+            <td>1.5</td>
+            <td>2</td>
+            <td>2.5</td>
+            <td>2.8</td>
+            <td>3</td>
+            <td>3.5</td>
+            <td>4</td>
         </tr>
         <tr>
-            <td>
-                New Cast Times
-            </td>
-            <td>
-                1.44
-            </td>
-            <td>
-                1.92
-            </td>
-            <td>
-                2.4
-            </td>
-            <td>
-                2.68
-            </td>
-            <td>
-                2.88
-            </td>
-            <td>
-                3.36
-            </td>
-            <td>
-                3.84
-            </td>
+            <td>New Cast Times</td>
+            <td id="SPS1">1.44</td>
+            <td id="SPS2">1.92</td>
+            <td id="SPS3">2.4</td>
+            <td id="SPS4">2.68</td>
+            <td id="SPS5">2.88</td>
+            <td id="SPS6">3.36</td>
+            <td id="SPS7">3.84</td>
         </tr>
     </table>
 
     <p></p>
 
     <!--Foods Calculator Table-->
-    <table>
+    <table id = "foodTable">
         <tr>
             <td>Food</td>
             <td>Stat 1</td>
@@ -402,130 +567,131 @@
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/0638000476e/" class="eorzeadb_link">Archon Burger</a></td>
-            <td>Direct Hit Rate: 90</td>
-            <td>Vitality: 93</td>
-            <td>Determination: 54</td>
+            <td id="Archon Burger1">Direct Hit: 90</td>
+            <td id="Archon Burger2">Vitality: 93</td>
+            <td id="Archon Burger3">Determination: 54</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/2936c4b37c0/" class="eorzeadb_link">Beef Stroganoff</a></td>
-            <td>Skill Speed: 90</td>
-            <td>Vitality: 93</td>
-            <td>Direct Hit Rate: 54</td>
+            <td id="Beef Stroganoff1">Skill Speed: 90</td>
+            <td id="Beef Stroganoff2">Vitality: 93</td>
+            <td id="Beef Stroganoff3">Direct Hit: 54</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/7538b2794aa/" class="eorzeadb_link">Pumpkin Ratatouille</a></td>
-            <td>Critical Hit: 90</td>
-            <td>Vitality: 93</td>
-            <td>Skill Speed: 54</td>
+            <td id="Pumpkin Ratatouille1">Critical Hit: 90</td>
+            <td id="Pumpkin Ratatouille2">Vitality: 93</td>
+            <td id="Pumpkin Ratatouille3">Skill Speed: 54</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/a1bd66cc8e5/" class="eorzeadb_link">Pumpkin Potage</a></td>
-            <td>Determination: 90</td>
-            <td>Vitality: 93</td>
-            <td>Critical Hit: 54</td>
+            <td id="Pumpkin Potage1">Determination: 90</td>
+            <td id="Pumpkin Potage2">Vitality: 93</td>
+            <td id="Pumpkin Potage3">Critical Hit: 54</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/789fe90bd5c/" class="eorzeadb_link">Peach Juice</a></td>
-            <td>Piety: 90</td>
-            <td>Vitality: 93</td>
-            <td>Determination: 54</td>
+            <td id="Peach Juice1">Piety: 90</td>
+            <td id="Peach Juice2">Vitality: 93</td>
+            <td id="Peach Juice3">Determination: 54</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/8f5aac8a216/" class="eorzeadb_link">Peach Tart</a></td>
-            <td>Spell Speed: 90</td>
-            <td>Vitality: 93</td>
-            <td>Piety: 54</td>
+            <td id="Peach Tart1">Spell Speed: 90</td>
+            <td id="Peach Tart2">Vitality: 93</td>
+            <td id="Peach Tart3">Piety: 54</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/4a8d54c2efa/" class="eorzeadb_link">Sykon Cookie</a></td>
-            <td>Spell Speed: 90</td>
-            <td>Vitality: 93</td>
-            <td>Direct Hit Rate: 54</td>
+            <td id="Sykon Cookie1">Spell Speed: 90</td>
+            <td id="Sykon Cookie2">Vitality: 93</td>
+            <td id="Sykon Cookie3">Direct Hit: 54</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/e684e99590f/" class="eorzeadb_link">Thavnairian Chai</a></td>
-            <td>Critical Hit: 90</td>
-            <td>Vitality: 93</td>
-            <td>Spell Speed: 54</td>
+            <td id="Thavnairian Chai1">Critical Hit: 90</td>
+            <td id="Thavnairian Chai2">Vitality: 93</td>
+            <td id="Thavnairian Chai3">Spell Speed: 54</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/6d14c65dd8a/" class="eorzeadb_link">Scallop Salad</a></td>
-            <td>Tenacity: 90</td>
-            <td>Vitality: 93</td>
-            <td>Determination: 54</td>
+            <td id="Scallop Salad1">Tenacity: 90</td>
+            <td id="Scallop Salad2">Vitality: 93</td>
+            <td id="Scallop Salad3">Determination: 54</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/ada67e857f3/" class="eorzeadb_link">Scallop Curry</a></td>
-            <td>Determination: 90</td>
-            <td>Vitality: 93</td>
-            <td>Tenacity: 54</td>
+            <td id="Scallop Curry1">Determination: 90</td>
+            <td id="Scallop Curry2">Vitality: 93</td>
+            <td id="Scallop Curry3">Tenacity: 54</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/3bfe7fa5d4e/" class="eorzeadb_link">Elpis Deipnon</a></td>
-            <td>Tenacity: 82</td>
-            <td>Vitality: 85</td>
-            <td>Determination: 50</td>
+            <td id="Elpis Deipnon1">Tenacity: 82</td>
+            <td id="Elpis Deipnon2">Vitality: 85</td>
+            <td id="Elpis Deipnon3">Determination: 50</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/37fac9af789/" class="eorzeadb_link">Baked Alien Soup</a></td>
-            <td>Skill Speed: 82</td>
-            <td>Vitality: 85</td>
-            <td>Direct Hit Rate: 50</td>
+            <td id="Baked Alien Soup1">Skill Speed: 82</td>
+            <td id="Baked Alien Soup2">Vitality: 85</td>
+            <td id="Baked Alien Soup3">Direct Hit: 50</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/941e8588331/" class="eorzeadb_link">Sykon Salad</a></td>
-            <td>Spell Speed: 82</td>
-            <td>Vitality: 85</td>
-            <td>Direct Hit Rate: 50</td>
+            <td id="Sykon Salad1">Spell Speed: 82</td>
+            <td id="Sykon Salad2">Vitality: 85</td>
+            <td id="Sykon Salad3">Direct Hit: 50</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/1adacdf79f9/" class="eorzeadb_link">Sykon Compote</a></td>
-            <td>Piety: 82</td>
-            <td>Vitality: 85</td>
-            <td>Determination: 50</td>
+            <td id="Sykon Compote1">Piety: 82</td>
+            <td id="Sykon Compote2">Vitality: 85</td>
+            <td id="Sykon Compote3">Determination: 50</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/997edd435a2/" class="eorzeadb_link">Sykon Bavarois</a></td>
-            <td>Direct Hit Rate: 82</td>
-            <td>Vitality: 85</td>
-            <td>Determination: 50</td>
+            <td id="Sykon Bavarois1">Direct Hit: 82</td>
+            <td id="Sykon Bavarois2">Vitality: 85</td>
+            <td id="Sykon Bavarois3">Determination: 50</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/69e470db469/" class="eorzeadb_link">Philosopher's Sandwich</a></td>
-            <td>Spell Speed: 76</td>
-            <td>Vitality: 82</td>
-            <td>Direct Hit Rate: 46</td>
+            <td id="Philosopher's Sandwich1">Spell Speed: 76</td>
+            <td id="Philosopher's Sandwich2">Vitality: 82</td>
+            <td id="Philosopher's Sandwich3">Direct Hit: 46</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/2bbdf83e22f/" class="eorzeadb_link">Salted Thavnairian Cod</a></td>
-            <td>Piety: 76</td>
-            <td>Vitality: 82</td>
-            <td>Determination: 46</td>
+            <td id="Salted Thavnairian Cod1">Piety: 76</td>
+            <td id="Salted Thavnairian Cod2">Vitality: 82</td>
+            <td id="Salted Thavnairian Cod3">Determination: 46</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/ac97918bbd7/" class="eorzeadb_link">Coconut Cod Chowder</a></td>
-            <td>Determination: 76</td>
-            <td>Vitality: 82</td>
-            <td>Critical Hit: 46</td>
+            <td id="Coconut Cod Chowder1">Determination: 76</td>
+            <td id="Coconut Cod Chowder2">Vitality: 82</td>
+            <td id="Coconut Cod Chowder3">Critical Hit: 46</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/91505562cc2/" class="eorzeadb_link">The Noodles of Elpis</a></td>
-            <td>Direct Hit Rate: 76</td>
-            <td>Vitality: 82</td>
-            <td>Determination: 46</td>
+            <td id="The Noodles of Elpis1">Direct Hit: 76</td>
+            <td id="The Noodles of Elpis2">Vitality: 82</td>
+            <td id="The Noodles of Elpis3">Determination: 46</td>
         </tr>
         <tr>
             <td><a href="https://na.finalfantasyxiv.com/lodestone/playguide/db/item/2f126461b65/" class="eorzeadb_link">Giant Popoto Pancakes</a></td>
-            <td>Tenacity: 76</td>
-            <td>Vitality: 82</td>
-            <td>Determination: 46</td>
+            <td id="Giant Popoto Pancakes1">Tenacity: 76</td>
+            <td id="Giant Popoto Pancakes2">Vitality: 82</td>
+            <td id="Giant Popoto Pancakes3">Determination: 46</td>
         </tr>
     </table>
 
     <p></p>
-
+    
     <!--Tinctures Calculator Table-->
-    <table>
+    <table id="tinctureTable">
+        <caption>Tincture: 30 Second Duration</caption>
         <tr>
             <td>Tincture</td>
             <!--30s-->
@@ -631,7 +797,8 @@
     <p></p>
 
     <!--Infusions Calculator Table-->
-    <table>
+    <table id="infusionTable">
+        <caption>Infusion: 30 Second Duration</caption>
         <tr>
             <td>Infusion</td>
             <!--30s-->
@@ -704,7 +871,8 @@
     <p></p>
 
     <!--Potions Calculator Table-->
-    <table>
+    <table id="potionTable">
+        <caption>Potion: 15 Second Duration</caption>
         <tr>
             <td>Potion</td>
             <!--15s-->
