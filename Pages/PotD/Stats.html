@@ -7,9 +7,8 @@
 <body>
     <script src="https://img.finalfantasyxiv.com/lds/pc/global/js/eorzeadb/loader.js?v2"></script>
     <p></p>
-    <label for="race">Select Race:</label>
     <select name="race" id="race" class="race">
-        <option selected disabled hidden>--Please choose an option--</option>
+        <option selected disabled hidden>--Please select race--</option>
         <option value="Hyur Midlander">Hyur Midlander</option>
         <option value="Hyur Highlander">Hyur Highlander</option>
         <option value="Elezen Wildwood">Elezen Wildwood</option>
@@ -27,12 +26,8 @@
         <option value="Viera Rava">Viera Rava</option>
         <option value="Viera Veena">Viera Veena</option>
     </select> 
-
-    <p></p>
-
-    <label for="job">Select Job:</label>
     <select name="job" id="job">
-        <option selected disabled hidden>--Please choose an option--</option>
+        <option selected disabled hidden>--Please select job--</option>
         <optgroup label="Tanks">
             <option value="PLD">Paladin</option>
             <option value="WAR">Warrior</option>
@@ -63,12 +58,8 @@
             <option value="RDM">Red Mage</option>
         </optgroup>
     </select> 
-
-    <p></p>
-
-    <label for="food">Select Food:</label>
     <select name="food" id="food">
-        <option selected disabled hidden>--Please choose an option--</option>
+        <option selected disabled hidden>--Please select food--</option>
         <optgroup label="ilvl 580">
             <option value="Archon Burger">Archon Burger</option>
             <option value="Beef Stroganoff">Beef Stroganoff</option>
@@ -97,9 +88,10 @@
         </optgroup>
     </select>
 
-    <p><span id="test" class="test">Selection</span></p>
-
     <button onclick="myFunction()">Apply</button>
+
+    <p><span id="test" class="test">Selected Job - Race - Food</span></p>
+
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="jquery.csv.js"></script>
     <script>
@@ -364,6 +356,7 @@
 
     <!--Stats Calculator Table-->
     <table id="statsTable">
+        <caption>Stats</caption>
         <tr>
             <td>Stats</td>
             <td>Base Stats</td>
@@ -378,6 +371,10 @@
             <td id="RACE1">0</td>
             <td id="FOOD1">0</td>
             <td id="TOTAL1">0</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>Dexterity</td>
@@ -392,6 +389,10 @@
             <td id="RACE3">0</td>
             <td id="FOOD3">0</td>
             <td id="TOTAL3">0</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>Intelligence</td>
@@ -406,6 +407,10 @@
             <td id="RACE5">0</td>
             <td id="FOOD5">0</td>
             <td id="TOTAL5">0</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>Piety</td>
@@ -423,6 +428,9 @@
             <td id="FOOD7">0</td>
             <td id="TOTAL7">0</td>
             <td>Attack Power = Strength</td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>Direct Hit</td>
@@ -459,6 +467,9 @@
             <td id="FOOD11">0</td>
             <td id="TOTAL11"d>0</td>
             <td>Heal Magic Potency = Mind</td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>Determination</td>
@@ -477,6 +488,8 @@
             <td id="TOTAL13">0</td>
             <td>1.00</td>
             <td>Auto Attack, DoT, and HoT Damage Multiplier (Speed Tables Below)</td>
+            <td></td>
+            <td></td>
         </tr>
         <tr>
             <td>Spell Speed</td>
@@ -558,6 +571,7 @@
 
     <!--Foods Calculator Table-->
     <table id = "foodTable">
+        <caption>Food</caption>
         <tr>
             <td>Food</td>
             <td>Stat 1</td>

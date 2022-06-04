@@ -4,15 +4,38 @@
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-table, td{
+button{
+    font-size: 20px;
+    border: 1px solid #fa5f2f;
+    color:#fa5f2f;
+}
+
+select{
+    font-size: 20px;
+    border: 1px solid;
+    float: left;
+    color: #fa5f2f;
+}
+
+table{
+    width: 75%;
     border: 1px solid;
     border-collapse: collapse; 
 }
 
 tr{
+    height: 35px;
     border-bottom: 1pt solid;
 }
 
 td{
     text-align: center;
+}
+
+tr:nth-child(even) td{
+    background-color: #222831;
+}
+
+caption{
+    color: #fa5f2f;
 }
