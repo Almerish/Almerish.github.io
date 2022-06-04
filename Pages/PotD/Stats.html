@@ -121,6 +121,13 @@
 
     function updateJobTable(strJob, strRace, strFood){
         
+        if (strJob == "--Please select job--"){
+            strJob = "NONE"
+        }
+        if (strRace == "--Please select race--"){
+            strJob = "NONE"
+        }
+
         $.get("JobStats.csv", function(data){
             var csvResults = $.csv.toObjects(data);
             let result = csvResults.find(result => result.Class === strJob);
@@ -185,22 +192,25 @@
             table.rows[i].cells[3].textContent = 0;
         }
         //update stat table
-        for(let i = 1; i<4; i++){
-            let stat = document.getElementById(strFood+i);
-            let parsedStat = stat.textContent.split(": ");
-            let job = "JOB" + foodStatsDict[parsedStat[0]];
-            let race = "RACE" + foodStatsDict[parsedStat[0]];
-            let food = "FOOD" + foodStatsDict[parsedStat[0]];
-            job = document.getElementById(job);
-            race = document.getElementById(race);
-            food = document.getElementById(food);
-            let foodBonus = Math.floor((parseInt(job.textContent) + parseInt(race.textContent)) * 0.10);
-            if (foodBonus<=parseInt(parsedStat[1])){
-                food.textContent = foodBonus;
-            } else {
-                food.textContent = parsedStat[1];
+        if (strFood != "--Please select food--"){
+            for(let i = 1; i<4; i++){
+                let stat = document.getElementById(strFood+i);
+                let parsedStat = stat.textContent.split(": ");
+                let job = "JOB" + foodStatsDict[parsedStat[0]];
+                let race = "RACE" + foodStatsDict[parsedStat[0]];
+                let food = "FOOD" + foodStatsDict[parsedStat[0]];
+                job = document.getElementById(job);
+                race = document.getElementById(race);
+                food = document.getElementById(food);
+                let foodBonus = Math.floor((parseInt(job.textContent) + parseInt(race.textContent)) * 0.10);
+                if (foodBonus<=parseInt(parsedStat[1])){
+                    food.textContent = foodBonus;
+                } else {
+                    food.textContent = parsedStat[1];
+                }
             }
         }
+        
         table = document.getElementById("foodTable");
         //update food table
         for(let i = 1; i<table.rows.length; i++){
