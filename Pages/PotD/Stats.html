@@ -1,11 +1,14 @@
 <html>  
-<title>Palace of the Dead Stats</title>
+<head>
+    <title>Palace of the Dead Stats</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
 
 <body>
     <script src="https://img.finalfantasyxiv.com/lds/pc/global/js/eorzeadb/loader.js?v2"></script>
     <p></p>
     <label for="race">Select Race:</label>
-    <select name="race" id="race">
+    <select name="race" id="race" class="race">
         <option selected disabled hidden>--Please choose an option--</option>
         <option value="Hyur Midlander">Hyur Midlander</option>
         <option value="Hyur Highlander">Hyur Highlander</option>
@@ -94,7 +97,7 @@
         </optgroup>
     </select>
 
-    <p><span id="test">Selection</span></p>
+    <p><span id="test" class="test">Selection</span></p>
 
     <button onclick="myFunction()">Apply</button>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -419,7 +422,6 @@
             <td id="RACE7">0</td>
             <td id="FOOD7">0</td>
             <td id="TOTAL7">0</td>
-            <td></td>
             <td>Attack Power = Strength</td>
         </tr>
         <tr>
@@ -448,16 +450,14 @@
             <td id="RACE10">0</td>
             <td id="FOOD10">0</td>
             <td id="TOTAL10">0</td>
-            <td></td>
-            <td>Attack Magic Potency = Intelligence (Mind for Healers)</td>
+            <td>Attack Magic Potency = Intelligence/Mind</td>
         </tr>
         <tr>
             <td>Heal Magic Potency</td>
             <td id="JOB11">0</td>
             <td id="RACE11">0</td>
             <td id="FOOD11">0</td>
-            <t id="TOTAL11"d>0</td>
-            <td></td>
+            <td id="TOTAL11"d>0</td>
             <td>Heal Magic Potency = Mind</td>
         </tr>
         <tr>
